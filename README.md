@@ -23,6 +23,33 @@ in a way that we could:
 - know when things were broken and how it evolved to that state
 - whether action would be needed soon
 
+
+```
+
+
+                  .--> how can I tell this is ok?
+                 /
+                 /
+                 /
+   k8s cluster................................
+   .             /
+   .             /
+   .   concourse deployment --------------
+   .   |
+   .   |   web
+   .   |     
+   .   |
+   .   |   workers
+   .   |
+   .   |
+   .   |   postgres
+   .   |
+
+
+```
+
+
+
 Traditionally, we've been using a combination of InfluxDB as our timeseries
 database of choice, paired with Grafana, for displaying the metrics sent to
 Influx on dashboards.
@@ -62,5 +89,9 @@ exposition format:
 As we were all about empathizing with the Kubernetes ecosystem, it made a lot of
 sense to then leverage that stack.
 
+
 ## what's this thing?
+
+Prometheus is a 
+
 
