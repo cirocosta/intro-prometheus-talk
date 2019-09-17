@@ -128,11 +128,79 @@ In practical terms, that means:
 - providing you with client libraries that let you instrument your code in a way
   that allows you to easily expose metrics that you care about
 
+
+```go
+// import the library
+//
+import (
+	"github.com/prometheus/client_golang/prometheus"
+)
+
+
+
+// define the metric you care about
+//
+var DatabaseQueries = prometheus.NewCounter(
+  prometheus.CounterOpts{
+    Name: "concourse_db_queries_total",
+    Help: "Number of queries performed",
+  },
+)
+
+
+// in a function that executes queries ...
+//
+func (e *countingConn) Query(query string, args ...interface{}) (*sql.Rows, error) {
+
+  // increment the counter
+  //
+	DatabaseQueries.Inc()
+
+	return e.Conn.Query(query, args...)
+}
+```
+
+
+
 - providing a server that ingests those metrics and allows you to query them
   in various forms
 
+
+
+```
+
+    prometheus server instance
+      
+      .
+      |
+      |   ingestion of timeseries samples 
+      |
+      .
+
+    service
+
+
+```
+
+
 - defining standards on how to make those queries, and how to expose those
   metrics (so that the system can be extended).
+
+
+
+```
+
+      grafana
+       |
+       |
+       |  queries   (what's per-second rate of db queries being performed
+       |               by our concourse web nodes?)
+       |
+       |
+       *-->  prometheus server instance
+
+
+```
 
 
 
