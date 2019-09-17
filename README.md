@@ -332,6 +332,75 @@ or, if you'd like to create something crazy that's very specific to your
 usecase, you can also communicate via a text file that is continuously scanned
 by the Prometheus server.
 
+Once the targets have been discovered, then all Prometheus does is make requests
+to each of those targets to collect samples for their metrics:
+
+
+```
+
+
+    prometheus
+     |
+     |  for each target:
+     |     on scrap interval tick:
+     |        gather samples from target 
+     |
+     |
+     *------->  web-1
+     *------->  worker-1
+     *------->  worker-2
+
+
+```
+
+If we take `web-1` as an example, we can see the format that Prometheus expects
+(the Prometheus exposition format):
+
+
+```
+
+# HELP concourse_db_queries_total Number of queries performed
+# TYPE concourse_db_queries_total counter
+concourse_db_queries_total 3005
+
+
+# HELP concourse_gc_containers_gced_total Number containers actually deleted
+# TYPE concourse_gc_containers_gced_total counter
+concourse_gc_containers_gced_total 0
+
+
+# HELP concourse_gc_containers_to_be_gced_total Number of containers found for deletion
+# TYPE concourse_gc_containers_to_be_gced_total counter
+concourse_gc_containers_to_be_gced_total{type="created"} 0
+concourse_gc_containers_to_be_gced_total{type="creating"} 0
+concourse_gc_containers_to_be_gced_total{type="destroying"} 0
+concourse_gc_containers_to_be_gced_total{type="failed"} 0
+
+```
+
+
+
+
+
+
+
+
+
+## in practice
+
+
+```go
+var (
+	DatabaseQueries = prometheus.NewCounter(
+		prometheus.CounterOpts{
+			Name: "concourse_db_queries_total",
+			Help: "Number of queries performed",
+		},
+	)
+)
+```
+
+(see [metrics/web.go](https://github.com/cirocosta/concourse/blob/7a34bfb5d2a6c8786fa84ea6b98878a04479474e/metrics/web.go#L104-L111))
 
 
 
