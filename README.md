@@ -295,6 +295,37 @@ scrape_configs:
 ```
 
 
+<br />
+<br />
+
+
+```
+
+
+  CONTINUOUSLY:
+
+
+            'hey, how could I reach
+             available Concourse web
+             nodes? kthx!'
+
+          *----------------------------> kubernetes api --------.
+          |                                                     |
+          |                                                     |
+          |                                                     |
+        prometheus  <-------------------------------------------*
+                                    'np! this is what I have!'
+                                        - { 
+                                           __address__: '10.0.1.10:9090',
+                                            __meta_k8s_namespace: '...',
+                                            __meta_k8s_pod_label_app: 'concourse'
+                                          }
+                                        - ...
+            
+
+```
+
+
 
 
 
