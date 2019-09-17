@@ -224,6 +224,17 @@ func (e *countingConn) Query(query string, args ...interface{}) (*sql.Rows, erro
 
 
 
+## service discovery
+
+In order for Prometheus to get samples ingested from instances that have metrics
+expsoed, rather than having those instances targetting Prometheus (like how one
+do with a Datadog agent, or in the way that emitters do for InfluxDB),
+Prometheus does it in reverse: it pulls those stats from targets.
+
+
+
+
+
 ---
 
 Something that I really enjoy about it is how it nicely fits around dynamic
