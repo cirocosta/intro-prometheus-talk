@@ -48,6 +48,9 @@ in a way that we could:
 
 ```
 
+<br />
+<br />
+
 
 
 Traditionally, we've been using a combination of InfluxDB as our timeseries
@@ -85,6 +88,9 @@ exposition format:
 
 ```
 
+<br />
+<br />
+
 
 As we were all about empathizing with the Kubernetes ecosystem, it made a lot of
 sense to then leverage that stack.
@@ -121,6 +127,10 @@ better to observe:
 
 
 ```
+
+
+<br />
+<br />
 
 
 In practical terms, that means:
@@ -161,6 +171,10 @@ func (e *countingConn) Query(query string, args ...interface{}) (*sql.Rows, erro
 ```
 
 
+<br />
+<br />
+
+
 
 - providing a server that ingests those metrics and allows you to query them
   in various forms
@@ -182,6 +196,9 @@ func (e *countingConn) Query(query string, args ...interface{}) (*sql.Rows, erro
 
 ```
 
+<br />
+<br />
+
 
 - defining standards on how to make those queries, and how to expose those
   metrics (so that the system can be extended).
@@ -201,6 +218,9 @@ func (e *countingConn) Query(query string, args ...interface{}) (*sql.Rows, erro
 
 
 ```
+
+<br />
+<br />
 
 
 
