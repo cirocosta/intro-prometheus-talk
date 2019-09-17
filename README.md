@@ -92,6 +92,53 @@ sense to then leverage that stack.
 
 ## what's this thing?
 
-Prometheus is a 
+Prometheus is a whole stack for monitoring and alerting based around metrics
+(timeseries data), aiming at supporting you with tools for making your system
+better to observe:
+
+- getting metrics out of the things we care about
+- collecting them
+- querying
+
+
+```
+
+                  .----------> expose % of time spent in kernel mode
+                  |
+                  |       .---> expose number of requests to /api/v1/containers
+                  |       |
+    LINUX MACHINE.|.......|..............
+    |             |       |
+    |    NODE_EXPORTER    |
+    |                     |
+    |                     |
+    |    MY SERVICE.......|..............
+    |    |                |
+    |    |     import "github.com/prometheus/client_golang/prometheus"
+    |    |     ...
+    |    |
+    |    |               
+
+
+```
+
+
+In practical terms, that means:
+
+- providing you with client libraries that let you instrument your code in a way
+  that allows you to easily expose metrics that you care about
+
+- providing a server that ingests those metrics and allows you to query them
+  in various forms
+
+- defining standards on how to make those queries, and how to expose those
+  metrics (so that the system can be extended).
+
+
+
+---
+
+Something that I really enjoy about it is how it nicely fits around dynamic
+environments, where the things you want to observe come and go
 
 
