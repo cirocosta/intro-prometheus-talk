@@ -224,12 +224,78 @@ func (e *countingConn) Query(query string, args ...interface{}) (*sql.Rows, erro
 
 
 
-## service discovery
+## metrics gathering
 
 In order for Prometheus to get samples ingested from instances that have metrics
 expsoed, rather than having those instances targetting Prometheus (like how one
 do with a Datadog agent, or in the way that emitters do for InfluxDB),
 Prometheus does it in reverse: it pulls those stats from targets.
+
+
+```
+
+
+  prometheus
+    |
+    |
+    |                 concourse installation .........
+    |                 .
+    |                 .
+    |  "heyy, sup??"  .
+    *-------------------->web
+    |                 .
+    *-------------------->worker
+                      .   
+                      .   
+
+
+```
+
+Naturally, there needs to be a way for that Prometheus server to know how it can
+reach both the `web` nodes, and the worker nodes.
+
+One way of doing so is to manually just add the target configuration of those
+nodes to Prometheus, but that'd be terriable in an environment where many of
+those targets are ephemeral (like pods are).
+
+
+```yaml
+
+scrape_configs:
+
+  # target the `localhost:9090` endpoint to retrieve samples for the
+  # `prometheus` job
+  #
+  - job_name: prometheus
+    static_configs:
+      - targets:
+        - localhost:9090
+
+```
+
+
+With that in mind, Prometheus allows you to tell it how it can discover targets
+that it should ask for metrics:
+
+
+```yaml
+
+scrape_configs:
+  
+  # retrieves targets by communicating with the kubernetes api, staying
+  # syncrhonize with the cluster state.
+  #
+  # `role: endpoints` configures prometheus to discover targets from listed
+  # endpoints of a given service, thus, targetting only those endpoints that are
+  # considered `ready` by traditional kubernetes readiness criterias
+  #
+  - job_name: kubernetes-service-endpoints
+    kubernetes_sd_configs: [{role: endpoints}]
+
+```
+
+
+
 
 
 
