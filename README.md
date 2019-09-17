@@ -439,3 +439,33 @@ For instance, to compute the number of queries per seconds:
 irate(concourse_db_queries[1m])
 ```
 
+As those measurements can have multiple dimensions (for instance, we could be
+tracking requests performed to our API), we can also do aggregations and other
+things matching specific label sets:
+
+
+```
+// rate of failed requests
+//
+concourse_http_responses_duration_seconds_count{
+  status=~"5.*",
+  kubernetes_pod_name=~"$atc",
+  kubernetes_namespace=~"$namespace"
+}[5m])
+```
+
+
+```go
+var (
+	HttpResponseDuration = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name: "concourse_http_response_duration_seconds",
+			Help: "How long requests are taking to be served.",
+		},
+		[]string{"code", "route"},
+	)
+)
+```
+
+(see [metrics/web.go](https://github.com/cirocosta/concourse/blob/7a34bfb5d2a6c8786fa84ea6b98878a04479474e/metrics/web.go#L16-L17))
+
