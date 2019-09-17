@@ -380,39 +380,62 @@ concourse_gc_containers_to_be_gced_total{type="failed"} 0
 
 ```
 
+So what's happening here is that when we instrument our code, we define counters
+that are literally just some in-memory variables that we increment whenever a
+given action that we care about happens.
 
 
-
-
-
-
-
-
-## in practice
-
-
-```go
-var (
-	DatabaseQueries = prometheus.NewCounter(
-		prometheus.CounterOpts{
-			Name: "concourse_db_queries_total",
-			Help: "Number of queries performed",
-		},
-	)
-)
 ```
 
-(see [metrics/web.go](https://github.com/cirocosta/concourse/blob/7a34bfb5d2a6c8786fa84ea6b98878a04479474e/metrics/web.go#L104-L111))
+
+  CONCOURSE                                                       PROMETHEUS
+
+                                                "hey, how many queries you've
+                                                done?"
+
+    "oh, 0 so far"
+
+                                                thx!
 
 
 
+    performs a query against db
+        ----> queriesCount += 1
+
+    performs a query against db
+        ----> queriesCount += 1
+
+                                                "hey, how many queries you've
+                                                done?"
+
+
+    "ooh, I've done 2 so far!"
+
+                                                thx!
 
 
 
+```
 
----
 
-Something that I really enjoy about it is how it nicely fits around dynamic
-environments, where the things you want to observe come and go
+This is very similar to how one gather metrics for Linux too! You ask the Kernel
+how its counters look like, and then knowing that, you're free to do your
+graphing / computation however you like.
 
+
+
+## querying
+
+Once those have been ingested, then it's a matter of querying the datasets that
+Prometheus accumulated.
+
+To do so, we then leverage the Prometheus query language (PromQL), which allows
+you to do all sorts of computations in a very short syntax.
+
+For instance, to compute the number of queries per seconds:
+
+
+```
+irate(concourse_db_queries[1m])
+```
 
