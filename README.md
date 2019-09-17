@@ -6,6 +6,8 @@
 
 - [intro to the intro](#intro-to-the-intro)
 - [what's this thing?](#whats-this-thing)
+- [metrics gathering](#metrics-gathering)
+- [in practice](#in-practice)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
