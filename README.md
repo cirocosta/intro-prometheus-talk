@@ -315,15 +315,22 @@ scrape_configs:
           |                                                     |
         prometheus  <-------------------------------------------*
                                     'np! this is what I have!'
+
                                         - { 
                                            __address__: '10.0.1.10:9090',
                                             __meta_k8s_namespace: '...',
                                             __meta_k8s_pod_label_app: 'concourse'
                                           }
                                         - ...
-            
 
 ```
+
+But Prometheus is not k8s-specific (it started being developed even before
+Kubernetes), so, there are other service discovery mechanisms too! If you're
+sevices are reachable via DNS, you can use the DNS service discovery mechanism,
+or, if you'd like to create something crazy that's very specific to your
+usecase, you can also communicate via a text file that is continuously scanned
+by the Prometheus server.
 
 
 
